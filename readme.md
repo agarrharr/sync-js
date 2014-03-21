@@ -52,7 +52,7 @@ Usage
       }
     };
 
-sync.syncData(locations, callback);
+    sync.syncData(locations, callback);
 
 Options
 =====================
