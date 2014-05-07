@@ -355,10 +355,10 @@ var sync = function() {
 
   var markLocalstorageRowAsSynced = function(locationId, sendDataIndex) {
     var syncLocation = syncLocationDatabase[locationId];
-    var syncedName = syncLocation.locationInfo.syncedName;
+    var syncedName = syncLocation.locationInfo.dataLocation.syncedName;
 
     if(typeof sendDataIndex === 'undefined') {
-      window.localStorage.setItem(syncedName, syncLocation.locationInfo.syncedValue);
+      window.localStorage.setItem(syncedName, syncLocation.locationInfo.dataLocation.syncedValue);
     } else {
       var syncedArray = JSON.parse(window.localStorage.getItem(syncedName));
       var currentValue;
