@@ -342,7 +342,7 @@ var sync = function() {
     if(typeof sendDataIndex !== 'undefined') {
       var location = syncLocationDatabase[locationId];
       var databaseLocationJson = getDatabaseLocationJson(location.locationInfo.dataLocation.name);
-
+      var rowsToSync = JSON.parse(window.localStorage.getItem(location.locationInfo.dataLocation.syncedName));
       var sql = 'UPDATE ' + databaseLocationJson.table + ' SET ' + location.locationInfo.dataLocation.syncedName + ' = ' + location.locationInfo.dataLocation.syncedValue + ' WHERE ' + databaseLocationJson.key + ' = ' + rowsToSync[i];
 
       query(databaseLocationJson.database, 'SELECT * FROM ' + databaseLocationJson.table + ' ' + whereClause,
