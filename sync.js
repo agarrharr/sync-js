@@ -82,6 +82,11 @@ var sync = function() {
     }
   };
 
+  var cancelSync = function() {
+    syncLocationFactory.destroyLocations();
+    syncLocationDatabase = {};
+  };
+
   var addToSyncLocationDatabase = function(locations, callback) {
     var syncLocation = {};
     var id;
@@ -334,6 +339,11 @@ var sync = function() {
       markLocalstorageRowAsSynced(locationId, sendDataIndex);
     }
 
+    cancelLocation(locationId);
+  };
+
+  var cancelLocation = function(locationId) {
+    var syncLocation = syncLocationDatabase[locationId];
     syncLocationFactory.deleteLocation(syncLocation.locationInfo);
     delete syncLocationDatabase[locationId];
   };
@@ -382,7 +392,8 @@ var sync = function() {
   };
 
   var public = {
-    syncData: syncData
+    syncData: syncData,
+    cancelSync: cancelSync
   };
 
   /* test-code */
@@ -400,6 +411,7 @@ var sync = function() {
     returnCallbacks: returnCallbacks,
     convertDatabaseResultsToJson: convertDatabaseResultsToJson,
     markLocationAsSynced: markLocationAsSynced,
+    cancelLocation: cancelLocation,
     getLocations: getLocations,
     reset: reset
   };

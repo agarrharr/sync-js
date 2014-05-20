@@ -315,4 +315,38 @@
     equal(server.requests[0].url, 'http://www.app.com');
     sinon.assert.calledOnce(callback);
   });
+
+  test('cancelSync', function() {
+    expect(3);
+    var locations = [
+      {
+        dataLocation: {
+          type: 'localstorage',
+          name: 'firstName',
+          syncedType: 'localstorage',
+          syncedName: 'firstNameSynced'
+        },
+        send: {
+          url: 'http://www.app.com',
+          retry: 3
+        }
+      }
+    ];
+    mockStorage = {
+      firstName: 'Bobby',
+      firstNameSynced: 'false'
+    };
+    var results;
+    var callback = sinon.spy(function(r) {});
+
+    sync.syncData(locations, callback);
+    sync.cancelSync();
+
+    server.respondWith([200, {'Content-Type': 'application/json'}, '{"success": true}']);
+    server.respond();
+
+    equal(server.requests.length, 1);
+    equal(server.requests[0].url, 'http://www.app.com');
+    sinon.assert.neverCalledWith(callback);
+  });
 })();
