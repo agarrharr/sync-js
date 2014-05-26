@@ -82,6 +82,10 @@ var sync = function() {
     }
   };
 
+  var getUnsyncedLocations = function() {
+
+  };
+
   var cancelSync = function() {
     syncLocationFactory.destroyLocations();
     syncLocationDatabase = {};
@@ -175,7 +179,7 @@ var sync = function() {
       });
     } else if(syncLocation.locationInfo.dataLocation.type === 'localstorage') {
       var syncedName = syncLocation.locationInfo.dataLocation.syncedName;
-      if(window.localStorage.getItem(syncedName) === 'false') {
+      if(window.localStorage.getItem(syncedName) === syncLocation.locationInfo.dataLocation.unsyncedValue) {
         getDataFromLocalstorage(locationId, function(data) {
           syncLocationDatabase[locationId].sendData = alterFunction(data);
           unsyncedCallback();

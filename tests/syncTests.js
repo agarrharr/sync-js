@@ -185,6 +185,31 @@
     deepEqual(results[0].sendData, {settings: 'stuff'});
   });
 
+  test('setData- localstorage with non-standard syncedValue', function() {
+    expect(1);
+    var locations = [
+      {
+        dataLocation: {
+          type: 'localstorage',
+          name: 'settings',
+          syncedType: 'localstorage',
+          syncedName: 'settingsSynced',
+          syncedValue: 'rad',
+          unsyncedValue: 'bummer'
+        }
+      }
+    ];
+    mockStorage = {
+      settings: 'stuff',
+      settingsSynced: 'bummer'
+    };
+
+    sync.syncData(locations, function() {});
+    var results = sync._private.getLocations();
+
+    deepEqual(results[0].sendData, {settings: 'stuff'});
+  });
+
   test('setData- localstorage array', function() {
     expect(1);
     var locations = [
