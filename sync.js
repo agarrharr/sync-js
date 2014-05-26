@@ -82,8 +82,24 @@ var sync = function() {
     }
   };
 
-  var getUnsyncedLocations = function() {
-
+  var areUnsyncedLocations = function(locations, callback) {
+    var unsyncedValue;
+    for(var i = 0; i < locations.length; i++) {
+      unsyncedValue = (typeof locations[i].dataLocation.unsyncedValue === 'undefined') ? false: locations[i].dataLocation.unsyncedValue;
+      console.log(locations[i].dataLocation.syncedName);
+      console.log(locations[i].dataLocation.type);
+      console.log(unsyncedValue);
+      console.log(window.localStorage.getItem(locations[i].dataLocation.syncedName));
+      if(locations[i].dataLocation.type === 'localstorage') {
+        if(window.localStorage.getItem(locations[i].dataLocation.syncedName) === unsyncedValue) {
+          callback(true);
+          return;
+        }
+      } else if(syncLocation.locationInfo.dataLocation.type === 'database') {
+        
+      }
+    }
+    callback(false);
   };
 
   var cancelSync = function() {
@@ -397,6 +413,7 @@ var sync = function() {
 
   var public = {
     syncData: syncData,
+    areUnsyncedLocations: areUnsyncedLocations,
     cancelSync: cancelSync
   };
 

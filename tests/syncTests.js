@@ -210,6 +210,41 @@
     deepEqual(results[0].sendData, {settings: 'stuff'});
   });
 
+  asyncTest('areUnsyncedLocations', function() {
+    expect(1);
+    var locations = [
+      {
+        dataLocation: {
+          type: 'localstorage',
+          name: 'settings',
+          syncedType: 'localstorage',
+          syncedName: 'settingsSynced',
+          syncedValue: 'rad',
+          unsyncedValue: 'bummer'
+        }
+      },
+      {
+        dataLocation: {
+          type: 'localstorage',
+          name: 'content',
+          syncedType: 'localstorage',
+          syncedName: 'contentSynced'
+        }
+      }
+    ];
+    mockStorage = {
+      settings: 'stuff',
+      settingsSynced: 'rad',
+      content: 'stuff',
+      contentSynced: true
+    };
+
+    sync.areUnsyncedLocations(locations, function(results) {
+      equal(results, false);
+      start();
+    });
+  });
+
   test('setData- localstorage array', function() {
     expect(1);
     var locations = [
