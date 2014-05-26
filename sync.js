@@ -86,10 +86,6 @@ var sync = function() {
     var unsyncedValue;
     for(var i = 0; i < locations.length; i++) {
       unsyncedValue = (typeof locations[i].dataLocation.unsyncedValue === 'undefined') ? false: locations[i].dataLocation.unsyncedValue;
-      console.log(locations[i].dataLocation.syncedName);
-      console.log(locations[i].dataLocation.type);
-      console.log(unsyncedValue);
-      console.log(window.localStorage.getItem(locations[i].dataLocation.syncedName));
       if(locations[i].dataLocation.type === 'localstorage') {
         if(window.localStorage.getItem(locations[i].dataLocation.syncedName) === unsyncedValue) {
           callback(true);
