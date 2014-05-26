@@ -96,7 +96,35 @@ var sync = function() {
           return;
         }
       } else if(syncLocation.locationInfo.dataLocation.type === 'database') {
-        
+        var location = locations[i];
+        var databaseLocationJson = getDatabaseLocationJson(location.dataLocation.name);
+        var db = window.openDatabase(databaseLocationJson.database, "", databaseLocationJson.database, 1000000);
+
+        var whereClause = '';
+        if(location.dataLocation.syncedType === 'database') {
+          whereClause = 'WHERE ' + location.dataLocation.syncedName + ' = ' + location.dataLocation.unsyncedValue;
+        } else if(location.dataLocation.syncedType === 'localstorage'){
+          var rowsToSync = JSON.parse(window.localStorage.getItem(location.dataLocation.syncedName));
+          if(rowsToSync !== null) {
+            for(var j = 0; j < rowsToSync.length; j++) {
+              if(j === 0) {
+                whereClause = 'WHERE ';
+              } else {
+                whereClause += ' OR ';
+              }
+              whereClause += databaseLocationJson.key + ' = ' + rowsToSync[j];
+            }
+          }
+        }
+
+        query(databaseLocationJson.database, 'SELECT * FROM ' + databaseLocationJson.table + ' ' + whereClause,
+          function(results) {
+            if(results.success) {
+              callback(true);
+              return;
+            }
+          }
+        );
       }
     }
     callback(false);
