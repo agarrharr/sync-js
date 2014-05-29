@@ -397,9 +397,13 @@ var sync = function() {
       var location = syncLocationDatabase[locationId];
       var databaseLocationJson = getDatabaseLocationJson(location.locationInfo.dataLocation.name);
       var rowsToSync = JSON.parse(window.localStorage.getItem(location.locationInfo.dataLocation.syncedName));
-      var sql = 'UPDATE ' + databaseLocationJson.table + ' SET ' + location.locationInfo.dataLocation.syncedName + ' = ' + location.locationInfo.dataLocation.syncedValue + ' WHERE ' + databaseLocationJson.key + ' = ' + rowsToSync[i];
+      var sql = 'UPDATE ' + databaseLocationJson.table + ' SET ' + location.locationInfo.dataLocation.syncedName + ' = ' + location.locationInfo.dataLocation.syncedValue + ' WHERE ' + databaseLocationJson.key + ' = ' + rowsToSync[0];
 
-      query(databaseLocationJson.database, 'SELECT * FROM ' + databaseLocationJson.table + ' ' + whereClause,
+      for(var i = 1; i < rowsToSync.length; i++) {
+        sql = sql  + ' OR ' + databaseLocationJson.key + ' = ' + rowsToSync[i];
+      }
+
+      query(databaseLocationJson.database, sql,
         function(results) {
           convertDatabaseResultsToJson(locationId, results, function() {});
         }
